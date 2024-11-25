@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .resultado-text {
+            font-size: 18px;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .table-container {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        #graficoFlujo {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Series Uniformes</h1>
+    <h4>Elige la variable a encontrar:</h4>
+    <button onclick="mostrarValoresPA()">P/A</button>
+    <button onclick="mostrarValoresAP()">A/P</button>
+    <button onclick="mostrarValoresFA()">F/A</button>
+    <button onclick="mostrarValoresAF()">A/F</button>
+
+
+
+    <div class="bloque" style="display:flex">
+        <div id="valores">
+
+
+        </div>
+        <div id="resultado">
+    
+        </div>
+    </div>
+    <div id="tabla">
+
+    </div>
+    <div id="diagramaFlujoEfectivo">
+
+    </div>
+    
+    
+
+
+    
+</body>
+</html>

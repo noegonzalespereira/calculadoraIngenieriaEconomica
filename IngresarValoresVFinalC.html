@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="javascript:obtenerValoresVFinalC()" method="post" id="formulario">
+        <label for="inicial">Ingrese el Monto Inicial</label>
+        <input type="number" id="inicial" name="inicial"><br>
+        <label for="interes">Ingrese el Valor del Interes</label>
+        <input type="number" id="interes" name="interes"><br>
+        <label for="periodo_num">Ingrese el Periodo</label>
+        <input type="number" id="periodo_num" name="periodo_num">
+        <select name="periodo_tiempo" id="periodo_tiempo">
+            <option value="años">Años</option>
+            <option value="meses">Meses</option>
+            <option value="dias">Dias</option>
+
+        </select><br>
+        <input type="submit" value="Calcular">
+    </form>
+    
+</body>
+</html>
