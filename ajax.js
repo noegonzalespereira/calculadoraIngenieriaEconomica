@@ -46,6 +46,22 @@ function mostrarValoresVFinalSimple(){
     ajax.setRequestHeader("Content-Type", "text/html; charset=utf-8");
 	ajax.send();
 }
+function mostrarValoresVInicialSimple(){
+
+    var contenedor=document.getElementById('valores')
+    var ajax = new XMLHttpRequest() //crea el objetov ajax
+    ajax.open("get", "IngresarValoresVInicialSimple.html", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4) {
+            contenedor.innerHTML = ajax.responseText
+            document.getElementById('resultado').innerHTML = '';
+            document.getElementById('tabla').innerHTML = '';
+            document.getElementById('diagramaFlujoEfectivo').innerHTML = '';
+        }
+    }
+    ajax.setRequestHeader("Content-Type", "text/html; charset=utf-8");
+	ajax.send();
+}
 function  mostrarValoresICompuesto(){
 
     var contenedor=document.getElementById('valores')
@@ -210,7 +226,7 @@ function  mostrarValoresFA(){
 
     var contenedor=document.getElementById('valores')
     var ajax = new XMLHttpRequest() //crea el objetov ajax
-    ajax.open("get", "IngresarValoresPA.html", true);
+    ajax.open("get", "IngresarValoresFA.html", true);
     ajax.onreadystatechange = function () {
         if (ajax.readyState == 4) {
             contenedor.innerHTML = ajax.responseText
@@ -226,7 +242,7 @@ function  mostrarValoresAF(){
 
     var contenedor=document.getElementById('valores')
     var ajax = new XMLHttpRequest() //crea el objetov ajax
-    ajax.open("get", "IngresarValoresAF.html", true);
+    ajax.open("get", "IngresarValoresAFPrueba.html", true);
     ajax.onreadystatechange = function () {
         if (ajax.readyState == 4) {
             contenedor.innerHTML = ajax.responseText
@@ -237,6 +253,36 @@ function  mostrarValoresAF(){
     }
     ajax.setRequestHeader("Content-Type", "text/html; charset=utf-8");
 	ajax.send();
+}
+function mostrarValoresGradienteAG() {
+    var contenedor = document.getElementById('valores')
+    var ajax = new XMLHttpRequest()
+    ajax.open("get", "IngresarValoresAG.html", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4) {
+            contenedor.innerHTML = ajax.responseText
+            document.getElementById('resultado').innerHTML = '';
+            document.getElementById('tabla').innerHTML = '';
+            document.getElementById('diagramaFlujoEfectivo').innerHTML = '';
+        }
+    }
+    ajax.setRequestHeader("Content-Type", "text/html; charset=utf-8");
+    ajax.send();
+}
+function mostrarValoresGradientePG() {
+    var contenedor = document.getElementById('valores')
+    var ajax = new XMLHttpRequest()
+    ajax.open("get", "IngresarValoresPG.html", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4) {
+            contenedor.innerHTML = ajax.responseText
+            document.getElementById('resultado').innerHTML = '';
+            document.getElementById('tabla').innerHTML = '';
+            document.getElementById('diagramaFlujoEfectivo').innerHTML = '';
+        }
+    }
+    ajax.setRequestHeader("Content-Type", "text/html; charset=utf-8");
+    ajax.send();
 }
 // Variable global para almacenar la instancia del gráfico
 let miGrafico = null;
@@ -309,7 +355,39 @@ function obtenerValoresVfinalS() {
     }
     ajax.send(datos);
 }
+function obtenerValoresVinicialS() {
+    var resultadoContainer = document.getElementById('resultado');
+    var tablaContainer = document.getElementById('tabla');
+    var diagramaContainer = document.getElementById('diagramaFlujoEfectivo');
+    var formulario = document.getElementById('formulario');
+    var datos = new FormData(formulario);
 
+    var ajax = new XMLHttpRequest();
+    ajax.open("POST", "calcularVInicialSimple.php", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4 && ajax.status == 200) {
+            var response = JSON.parse(ajax.responseText);
+            
+            // Mostrar resultado
+            resultadoContainer.innerHTML = response.resultado;
+            
+            // Mostrar tabla
+            tablaContainer.innerHTML = response.tabla;
+            
+            // Limpiar y crear nuevo canvas para el gráfico
+            diagramaContainer.innerHTML = `
+                <h3>DIAGRAMA DE FLUJO DE EFECTIVO</h3>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="graficoFlujo"></canvas>
+                </div>
+            `;
+            
+            // Crear nuevo gráfico
+            crearGrafico(response.grafico);
+        }
+    }
+    ajax.send(datos);
+}
 function obtenerValoresICompuesto() {
     var resultadoContainer = document.getElementById('resultado');
     var tablaContainer = document.getElementById('tabla');
@@ -561,7 +639,7 @@ function obtenerValoresAP() {
             `;
             
             // Crear nuevo gráfico
-            crearGrafico(response.grafico);
+            crearGraficoFlujos(response.grafico);
         }
     }
     ajax.send(datos);
@@ -577,24 +655,33 @@ function obtenerValoresPA() {
     ajax.open("POST", "calcularPA.php", true);
     ajax.onreadystatechange = function () {
         if (ajax.readyState == 4 && ajax.status == 200) {
-            var response = JSON.parse(ajax.responseText);
+            try {
+                var response = JSON.parse(ajax.responseText);
             
-            // Mostrar resultado
-            resultadoContainer.innerHTML = response.resultado;
+                // Mostrar resultado
+                resultadoContainer.innerHTML = response.resultado;
+                
+                // Mostrar tabla
+                
+                // Limpiar y crear nuevo canvas para el gráfico
+                diagramaContainer.innerHTML = `
+                    <h3>DIAGRAMA DE FLUJO DE EFECTIVO</h3>
+                    <div style="position: relative; height: 400px;">
+                        <canvas id="graficoFlujo"></canvas>
+                    </div>
+                `;
+                
+                // Crear nuevo gráfico
+                crearGraficoFlujos(response.grafico);
+            } catch (e){
+                console.error("Error al procesar la respuesta:", e);
+                console.log("Respuesta recibida:", ajax.responseText);
+
+            }
+
+            }
             
-            // Mostrar tabla
-            
-            // Limpiar y crear nuevo canvas para el gráfico
-            diagramaContainer.innerHTML = `
-                <h3>DIAGRAMA DE FLUJO DE EFECTIVO</h3>
-                <div style="position: relative; height: 400px;">
-                    <canvas id="graficoFlujo"></canvas>
-                </div>
-            `;
-            
-            // Crear nuevo gráfico
-            crearGrafico(response.grafico);
-        }
+        
     }
     ajax.send(datos);
 }
@@ -625,7 +712,7 @@ function obtenerValoresAF() {
             `;
             
             // Crear nuevo gráfico
-            crearGrafico(response.grafico);
+            crearGraficoFlujosfinales(response.grafico);
         }
     }
     ajax.send(datos);
@@ -657,7 +744,64 @@ function obtenerValoresFA() {
             `;
             
             // Crear nuevo gráfico
-            crearGrafico(response.grafico);
+            crearGraficoFlujosfinales(response.grafico);
+        }
+    }
+    ajax.send(datos);
+}
+function obtenerValoresAG() {
+    var resultadoContainer = document.getElementById('resultado');
+    
+    var diagramaContainer = document.getElementById('diagramaFlujoEfectivo');
+    var formulario = document.getElementById('formulario');
+    var datos = new FormData(formulario);
+
+    var ajax = new XMLHttpRequest();
+    ajax.open("POST", "calcularAG.php", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4 && ajax.status == 200) {
+            var response = JSON.parse(ajax.responseText);
+            
+            resultadoContainer.innerHTML = response.resultado;
+            
+            
+            diagramaContainer.innerHTML = `
+                <h3>DIAGRAMA DE FLUJO DE PAGOS</h3>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="graficoFlujo"></canvas>
+                </div>
+            `;
+            
+            crearGraficoGradiente(response.grafico);
+        }
+    }
+    ajax.send(datos);
+}
+
+function obtenerValoresPG() {
+    var resultadoContainer = document.getElementById('resultado');
+    
+    var diagramaContainer = document.getElementById('diagramaFlujoEfectivo');
+    var formulario = document.getElementById('formulario');
+    var datos = new FormData(formulario);
+
+    var ajax = new XMLHttpRequest();
+    ajax.open("POST", "calcularPG.php", true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4 && ajax.status == 200) {
+            var response = JSON.parse(ajax.responseText);
+            
+            resultadoContainer.innerHTML = response.resultado;
+            
+            
+            diagramaContainer.innerHTML = `
+                <h3>DIAGRAMA DE FLUJO DE PAGOS</h3>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="graficoFlujo"></canvas>
+                </div>
+            `;
+            
+            crearGraficoGradiente(response.grafico);
         }
     }
     ajax.send(datos);
@@ -720,6 +864,246 @@ function crearGrafico(datos) {
                         label: function(context) {
                             let value = context.raw;
                             return `$${Math.abs(value).toFixed(2)}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+
+let graficoActual = null;
+function crearGraficoFlujos(datos) {
+    // Destruir gráfico anterior si existe
+    if (graficoActual) {
+        graficoActual.destroy();
+    }
+
+    const ctx = document.getElementById('graficoFlujo').getContext('2d');
+    
+    graficoActual = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: datos.periodos,
+            datasets: [{
+                data: datos.valores,
+                backgroundColor: function(context) {
+                    // Valor presente en azul, pagos en rojo
+                    return context.dataIndex === 0 ? '#2196F3' : '#FF5252';
+                },
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    grid: {
+                        color: '#e0e0e0',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return '$' + value.toFixed(2);
+                        }
+                    },
+                    beginAtZero: true,
+                    suggestedMin: -Math.max(datos.valorPresente, datos.serieUniforme) * 1.2,
+                    suggestedMax: Math.max(datos.valorPresente, datos.serieUniforme) * 1.2
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw;
+                            return `$${Math.abs(value).toFixed(2)}`;
+                        },
+                        title: function(context) {
+                            return context[0].dataIndex === 0 ? 
+                                'Valor Presente (P)' : 
+                                'Pago Uniforme (A)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+let graficoFinal = null;
+
+function crearGraficoFlujosfinales(datos) {
+    // Destruir gráfico anterior si existe
+    if (graficoFinal) {
+        graficoFinal.destroy();
+    }
+
+    const ctx = document.getElementById('graficoFlujo').getContext('2d');
+    
+    graficoFinal = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: datos.periodos,
+            datasets: [{
+                data: datos.valores,
+                backgroundColor: function(context) {
+                     // Pagos uniformes en azul, valor futuro en rojo
+                     return context.dataIndex === datos.periodos.length - 1 ? '#FF5252' : '#2196F3';
+                    
+                },
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    grid: {
+                        color: '#e0e0e0',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return '$' + value.toFixed(2);
+                        }
+                    },
+                    beginAtZero: true,
+                    suggestedMin: -Math.max(datos.inicial, datos.final) * 1.2,
+                    suggestedMax: Math.max(datos.inicial, datos.final) * 1.2
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw;
+                            return `$${Math.abs(value).toFixed(2)}`;
+                        },
+                        title: function(context) {
+                            return context[0].dataIndex === datos.periodos.length - 1 ? 
+                                'Valor Futuro (F)' : 
+                                'Serie Uniforme (A)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+let graficoGradiente = null;
+
+function crearGraficoGradiente(datos) {
+    // Destruir gráfico anterior si existe
+    if (graficoGradiente) {
+        graficoGradiente.destroy();
+    }
+
+    const ctx = document.getElementById('graficoFlujo').getContext('2d');
+    
+    graficoGradiente = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: datos.periodos,
+            datasets: [{
+                label: 'Gradiente',
+                data: datos.valores,
+                backgroundColor: function(context) {
+                    // Valor inicial en azul, gradientes en verde
+                    return context.dataIndex === 0 ? '#2196F3' : '#4CAF50';
+                },
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    grid: {
+                        color: '#e0e0e0',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return '$' + value.toFixed(2);
+                        }
+                    },
+                    beginAtZero: true,
+                    suggestedMin: -Math.max(datos.valorPresente, datos.serieUniforme) * 1.2,
+                    suggestedMax: Math.max(datos.valorPresente, datos.serieUniforme) * 1.2
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Flujo de Gradientes',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw;
+                            return `$${Math.abs(value).toFixed(2)}`;
+                        },
+                        title: function(context) {
+                            return context[0].dataIndex === 0 ? 
+                                'Valor Base' : 
+                                `Gradiente Período ${context[0].dataIndex}`;
                         }
                     }
                 }

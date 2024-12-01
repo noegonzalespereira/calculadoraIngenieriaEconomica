@@ -1,16 +1,17 @@
 <?php
-    $inicial=$_POST['inicial'];
+    $final=$_POST['final'];
     $interes=$_POST['interes'];
     $periodo_num=$_POST['periodo_num'];
     $periodo_tiempo=$_POST['periodo_tiempo'];
 
 
     $interesPorcentual=$interes/100;
+    $inicial=$final/(1+$interesPorcentual*$periodo_num);
     $interesPeriodico=$inicial*$interesPorcentual;
-    $final=$inicial*(1+$interesPorcentual*$periodo_num);
+
     // $final=$inicial*pow((1+$interesPorcentual),$periodo_num);
     $resultado = "<div class='resultado-text'>
-    Valor Final = $final $ </div>";
+    Valor Inicial = ". number_format($inicial,2)."  $ </div>";
 
     $tabla = '<h3>TABLA INTERES SIMPLE</h3>
     <div class="table-container">

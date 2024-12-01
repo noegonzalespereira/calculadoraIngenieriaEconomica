@@ -9,7 +9,8 @@
             font-size: 18px;
             padding: 15px;
             margin: 20px 0;
-            background-color: #f8f9fa;
+            background-color: rgb(3,29,68);
+            color:white;
             border-radius: 5px;
             text-align: center;
         }
@@ -21,14 +22,21 @@
             width: 100%;
             border-collapse: collapse;
             background-color: white;
+            border:1px solid black;
+            border-radius: 8px;
+            color:white;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: center;
+            border:1px solid black;
+
         }
         th {
-            background-color: #f5f5f5;
+            background-color: rgb(3,29,68);
+            border:1px solid black;
+
         }
         tr:nth-child(even) {
             background-color: #f8f9fa;
@@ -37,15 +45,58 @@
             max-width: 800px;
             margin: 20px auto;
         }
+        h2{
+            text-align: center;
+            color: white;
+
+        }
+        h4{
+            margin-left: 30px;
+            color: white;
+
+        }
+        .botones{
+            margin-left: 30px;
+            
+        }
+        button{
+            background-color: rgb(112,162,136);
+            color: white;
+            padding: 8px;
+            border:1px solid white;
+            border-radius: 15px;
+            width: 120px;
+
+        }
+        #valores{
+            margin-left: 30px;
+        }
+        #resultado{
+            margin-left: 60px;
+            margin-top: 100px;
+            
+        }
+        #tabla{
+            margin-left: 30px;
+
+        }
+        #diagramaFlujoEfectivo{
+            margin-left: 30px;
+
+        }
     </style>
 </head>
 <body>
-    <h1>Series Uniformes</h1>
+    <h2>Series Uniformes</h2>
     <h4>Elige la variable a encontrar:</h4>
-    <button onclick="mostrarValoresPA()">P/A</button>
-    <button onclick="mostrarValoresAP()">A/P</button>
-    <button onclick="mostrarValoresFA()">F/A</button>
-    <button onclick="mostrarValoresAF()">A/F</button>
+    <div class="botones">
+        <button onclick="mostrarValoresPA()">P/A</button>
+        <button onclick="mostrarValoresAP()">A/P</button>
+        <button onclick="mostrarValoresFA()">F/A</button>
+        <button onclick="mostrarValoresAF()">A/F</button>
+
+    </div>
+    
 
 
 
